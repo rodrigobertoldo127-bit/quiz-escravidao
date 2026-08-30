@@ -15,6 +15,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
     padding: 20px;
@@ -22,14 +26,28 @@ body {
     font-family: Arial, sans-serif;
     color: white;
 
-    /* FOTO DE FUNDO - FUNCIONA NO file:/// E NO GITHUB PAGES */
+    /* FOTO HISTÓRICA DE FUNDO */
     background-image:
-        linear-gradient(rgba(8, 12, 20, 0.72), rgba(8, 12, 20, 0.82)),
-        url("https://upload.wikimedia.org/wikipedia/commons/8/82/Slaves_working_on_a_coffee_plantation_01.jpg");
+        linear-gradient(
+            rgba(10, 15, 25, 0.82),
+            rgba(10, 15, 25, 0.88)
+        ),
+        url("https://upload.wikimedia.org/wikipedia/commons/0/0e/Slave_Brazil_1865.jpg");
+
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     background-repeat: no-repeat;
+}
+
+/* CAMADA EXTRA PARA CELULAR */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 10, 18, 0.12);
+    pointer-events: none;
+    z-index: -1;
 }
 
 .container {
@@ -39,18 +57,23 @@ body {
 }
 
 .card {
-    background: rgba(15, 23, 42, 0.78);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.10);
-    box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    border: 1px solid rgba(255,255,255,0.12);
+
     border-radius: 18px;
     padding: 25px;
     margin-bottom: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.35);
 }
 
 h1 {
     text-align: center;
+    margin-top: 0;
 }
 
 h2 {
@@ -67,7 +90,10 @@ input[type="text"] {
     padding: 15px;
     border-radius: 10px;
     border: none;
+    outline: none;
+
     margin: 10px 0;
+
     font-size: 16px;
 }
 
@@ -75,17 +101,24 @@ button {
     width: 100%;
     padding: 15px;
     margin-top: 10px;
+
     border: none;
     border-radius: 10px;
+
     background: #22c55e;
     color: white;
+
     font-size: 17px;
     font-weight: bold;
+
     cursor: pointer;
+
+    transition: 0.2s;
 }
 
 button:hover {
     filter: brightness(1.1);
+    transform: translateY(-1px);
 }
 
 .azul {
@@ -93,10 +126,15 @@ button:hover {
 }
 
 .question {
-    background: rgba(0,0,0,0.30);
+    background: rgba(0,0,0,0.28);
+
     padding: 18px;
+
     border-radius: 14px;
+
     margin-bottom: 18px;
+
+    border: 1px solid rgba(255,255,255,0.07);
 }
 
 .question h3 {
@@ -105,11 +143,17 @@ button:hover {
 
 label {
     display: block;
+
     padding: 13px;
     margin: 8px 0;
+
     border-radius: 9px;
+
     background: rgba(255,255,255,0.08);
+
     cursor: pointer;
+
+    transition: 0.15s;
 }
 
 label:hover {
@@ -122,27 +166,37 @@ input[type="radio"] {
 
 .resultado {
     text-align: center;
+
     font-size: 20px;
+
     line-height: 1.8;
+
     padding: 20px;
+
     background: rgba(34,197,94,0.15);
+
     border-radius: 15px;
 }
 
 .erro {
     text-align: center;
+
     color: #f87171;
+
     font-weight: bold;
 }
 
 .sucesso {
     text-align: center;
+
     color: #4ade80;
+
     font-weight: bold;
 }
 
 .loading {
     text-align: center;
+
     color: #cbd5e1;
 }
 
@@ -152,24 +206,39 @@ input[type="radio"] {
 
 .aviso-placar {
     text-align: center;
+
     margin-top: 18px;
+
     color: #facc15;
+
     font-weight: bold;
 }
 
 .ranking-header,
 .ranking-item {
     display: grid;
-    grid-template-columns: 60px 1fr 100px 100px 100px;
+
+    grid-template-columns:
+        60px
+        1fr
+        100px
+        100px
+        100px;
+
     gap: 8px;
+
     align-items: center;
+
     padding: 14px;
+
     border-radius: 10px;
+
     margin-bottom: 8px;
 }
 
 .ranking-header {
     background: rgba(255,255,255,0.15);
+
     font-weight: bold;
 }
 
@@ -197,22 +266,52 @@ input[type="radio"] {
     font-weight: bold;
 }
 
+
+/* CELULAR */
+
 @media (max-width: 650px) {
 
     body {
         padding: 10px;
+
         background-attachment: scroll;
+
+        background-position: center;
     }
 
     .card {
         padding: 18px;
+
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 25px;
     }
 
     .ranking-header,
     .ranking-item {
-        grid-template-columns: 40px 1fr 65px 65px 65px;
-        font-size: 12px;
+
+        grid-template-columns:
+            38px
+            1fr
+            58px
+            58px
+            62px;
+
+        gap: 4px;
+
+        font-size: 11px;
+
         padding: 10px 5px;
+    }
+
+    .question {
+        padding: 14px;
+    }
+
+    label {
+        padding: 12px 9px;
     }
 
 }
@@ -225,7 +324,10 @@ input[type="radio"] {
 
 <div class="container">
 
-<!-- INÍCIO -->
+
+<!-- =========================
+INÍCIO
+========================= -->
 
 <div id="inicio" class="card">
 
@@ -253,7 +355,9 @@ Começar Quiz
 </div>
 
 
-<!-- QUIZ -->
+<!-- =========================
+QUIZ
+========================= -->
 
 <div id="quiz" class="card hidden">
 
@@ -270,7 +374,9 @@ Finalizar Questionário
 </div>
 
 
-<!-- RESULTADO -->
+<!-- =========================
+RESULTADO
+========================= -->
 
 <div id="resultadoTela" class="card hidden">
 
@@ -295,7 +401,9 @@ onclick="segundoQuiz()"
 </div>
 
 
-<!-- PLACAR -->
+<!-- =========================
+PLACAR
+========================= -->
 
 <div id="placar" class="card hidden">
 
@@ -847,9 +955,6 @@ nomeJogador = nome;
 
 quizAtual = 1;
 
-notaPrimeiro = 0;
-notaSegundo = 0;
-
 document.getElementById("inicio")
 .classList.add("hidden");
 
@@ -880,8 +985,6 @@ const area =
 document.getElementById("perguntas");
 
 area.innerHTML = "";
-
-document.getElementById("erroQuiz").textContent = "";
 
 lista.forEach((q, index) => {
 
