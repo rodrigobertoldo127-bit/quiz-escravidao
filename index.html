@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz - Escravidão no Brasil</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #111827;
+            color: white;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .titulo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .titulo h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .titulo p {
+            color: #9ca3af;
+        }
+
+        .questao {
+            background: #1f2937;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .questao h2 {
+            font-size: 19px;
+            margin-bottom: 20px;
+        }
+
+        .alternativa {
+            display: block;
+            background: #374151;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .alternativa:hover {
+            background: #4b5563;
+        }
+
+        .alternativa input {
+            margin-right: 10px;
+        }
+
+        .alternativa.selecionada {
+            background: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            padding: 17px;
+            border: none;
+            border-radius: 12px;
+            background: #2563eb;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        #refazer {
+            background: #16a34a;
+            display: none;
+            margin-top: 15px;
+        }
+
+        #refazer:hover {
+            background: #15803d;
+        }
+
+        #resultado {
+            display: none;
+            background: #1f2937;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        #resultado h2 {
+            margin-bottom: 15px;
+        }
+
+        .nota {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .resposta {
+            background: #374151;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 12px 0;
+        }
+
+        .acertou {
+            border-left: 5px solid #22c55e;
+        }
+
+        .errou {
+            border-left: 5px solid #ef4444;
+        }
+
+        .errado {
+            color: #f87171;
+            margin-top: 8px;
+        }
+
+        .correto {
+            color: #4ade80;
+            margin-top: 8px;
+        }
+
+        .parabens {
+            background: #166534;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .titulo-resultado {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="titulo">
+        <h1>📚 Quiz: Escravidão no Brasil</h1>
+        <p>Responda às 20 questões e veja seu resultado no final.</p>
+    </div>
+
+    <div id="quiz"></div>
+
+    <button onclick="finalizarQuiz()">
+        ✅ Finalizar Quiz
+    </button>
+
+    <div id="resultado"></div>
+
+    <button id="refazer" onclick="refazerQuiz()">
+        🔄 Refazer Quiz com outras perguntas
+    </button>
+
+</div>
+
+
+<script>
+
+
+// =====================================================
+// QUIZ 1
+// =====================================================
+
+const perguntas1 = [
+
+    {
+        pergunta: "O que aconteceu com a escravidão após a Independência do Brasil, em 1822?",
+        alternativas: [
+            "Foi imediatamente abolida.",
+            "Foi mantida.",
+            "Foi proibida apenas nas cidades.",
+            "Foi substituída pelo trabalho assalariado."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "A Constituição de 1824:",
+        alternativas: [
+            "Aboliu a escravidão.",
+            "Proibiu o tráfico negreiro.",
+            "Manteve a escravidão.",
+            "Libertou todos os escravizados."
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "A lei de 1831 tinha como objetivo:",
+        alternativas: [
+            "Acabar com o café.",
+            "Proibir o tráfico de pessoas escravizadas.",
+            "Libertar os escravizados com mais de 60 anos.",
+            "Criar a Lei do Ventre Livre."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "O que aconteceu com a lei de 1831?",
+        alternativas: [
+            "Foi totalmente cumprida.",
+            "Foi ignorada e o tráfico continuou.",
+            "Foi cancelada pela Inglaterra.",
+            "Acabou com a escravidão."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "Durante o Segundo Reinado, qual produto se destacou na economia brasileira?",
+        alternativas: [
+            "Café.",
+            "Petróleo.",
+            "Borracha.",
+            "Carvão."
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "A escravidão continuou por tanto tempo principalmente porque:",
+        alternativas: [
+            "A economia dependia da mão de obra escravizada.",
+            "Não existiam trabalhadores livres.",
+            "A população era contra a abolição.",
+            "A Inglaterra obrigava o Brasil a manter a escravidão."
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "O tráfico negreiro acabou efetivamente em 1850 com a:",
+        alternativas: [
+            "Lei Áurea.",
+            "Lei do Ventre Livre.",
+            "Lei Eusébio de Queirós.",
+            "Lei dos Sexagenários."
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "Após o fim do tráfico negreiro em 1850, a escravidão:",
+        alternativas: [
+            "Acabou imediatamente.",
+            "Continuou por meio do comércio interno de pessoas escravizadas.",
+            "Foi proibida somente no Nordeste.",
+            "Deixou de existir nas fazendas de café."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "O comércio interno de pessoas escravizadas aumentou principalmente do:",
+        alternativas: [
+            "Sudeste para o Nordeste.",
+            "Nordeste para o Sudeste.",
+            "Sul para o Nordeste.",
+            "Norte para o Sul."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "A Lei do Ventre Livre foi criada em:",
+        alternativas: [
+            "1822.",
+            "1850.",
+            "1871.",
+            "1888."
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "A Lei do Ventre Livre determinava que:",
+        alternativas: [
+            "Todos os escravizados seriam libertados imediatamente.",
+            "Filhos de mulheres escravizadas nasceriam livres.",
+            "Pessoas com mais de 60 anos seriam libertadas.",
+            "O tráfico negreiro seria permitido."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "Na prática, a Lei do Ventre Livre:",
+        alternativas: [
+            "Acabou imediatamente com a escravidão.",
+            "Permitiu que os filhos permanecessem sob a guarda dos senhores por anos.",
+            "Libertou todos os adultos escravizados.",
+            "Proibiu o trabalho nas plantações."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "A Lei dos Sexagenários, de 1885, determinava a liberdade para:",
+        alternativas: [
+            "Crianças menores de 10 anos.",
+            "Pessoas escravizadas com 60 anos ou mais.",
+            "Todos os escravizados do Brasil.",
+            "Apenas escravizados que trabalhavam no café."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "Por que a Lei dos Sexagenários teve pouco impacto?",
+        alternativas: [
+            "Porque poucos escravizados chegavam aos 60 anos e havia condições para a liberdade.",
+            "Porque foi criada depois da Lei Áurea.",
+            "Porque libertava apenas crianças.",
+            "Porque proibia a liberdade dos idosos."
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "Qual foi a lei que acabou definitivamente com a escravidão no Brasil?",
+        alternativas: [
+            "Lei Eusébio de Queirós.",
+            "Lei do Ventre Livre.",
+            "Lei dos Sexagenários.",
+            "Lei Áurea."
+        ],
+        correta: 3
+    },
+
+    {
+        pergunta: "A Lei Áurea foi assinada em:",
+        alternativas: [
+            "7 de setembro de 1822.",
+            "13 de maio de 1888.",
+            "15 de novembro de 1889.",
+            "21 de abril de 1885."
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "Quem assinou a Lei Áurea?",
+        alternativas: [
+            "Dom Pedro I.",
+            "Dom Pedro II.",
+            "Princesa Isabel.",
+            "Marechal Deodoro da Fonseca."
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "Qual das alternativas apresenta um motivo para a escravidão ter durado tanto no Brasil?",
+        alternativas: [
+            "A elite política era formada, em grande parte, por proprietários de escravizados.",
+            "A população escravizada não trabalhava na economia.",
+            "O café não precisava de mão de obra.",
+            "O Brasil não sofria pressão externa."
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "O que aconteceu com a população negra após a abolição em 1888?",
+        alternativas: [
+            "Recebeu terras e apoio do governo.",
+            "Foi imediatamente integrada à sociedade com igualdade econômica.",
+            "Continuou enfrentando exclusão social e econômica.",
+            "Recebeu indenização dos proprietários."
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "Qual sequência apresenta corretamente os principais acontecimentos?",
+        alternativas: [
+            "1822 — Lei Áurea / 1850 — Independência / 1888 — Lei do Ventre Livre.",
+            "1831 — Lei Áurea / 1871 — fim do tráfico / 1885 — Independência.",
+            "1850 — Lei Eusébio de Queirós / 1871 — Lei do Ventre Livre / 1885 — Lei dos Sexagenários / 1888 — Lei Áurea.",
+            "1871 — Lei Eusébio de Queirós / 1885 — Lei Áurea / 1888 — Lei do Ventre Livre."
+        ],
+        correta: 2
+    }
+
+];
+
+
+// =====================================================
+// QUIZ 2
+// =====================================================
+
+const perguntas2 = [
+
+    {
+        pergunta: "Qual era uma das principais bases da economia brasileira durante o período escravista?",
+        alternativas: [
+            "Mão de obra escravizada",
+            "Trabalho exclusivamente industrial",
+            "Tecnologia agrícola moderna",
+            "Trabalho exclusivamente voluntário"
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "O que a Constituição de 1824 fez em relação à escravidão?",
+        alternativas: [
+            "Aboliu a escravidão",
+            "Manteve a escravidão",
+            "Proibiu o café",
+            "Libertou os idosos"
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "A pressão inglesa contribuiu principalmente para:",
+        alternativas: [
+            "A manutenção do tráfico",
+            "O combate ao tráfico negreiro",
+            "A criação da Lei do Ventre Livre",
+            "A criação da República"
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "Qual lei de 1831 proibiu o tráfico de pessoas escravizadas?",
+        alternativas: [
+            "Lei Áurea",
+            "Lei Eusébio de Queirós",
+            "Lei de 1831",
+            "Lei dos Sexagenários"
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "O que aconteceu com a proibição do tráfico de 1831?",
+        alternativas: [
+            "Foi totalmente respeitada",
+            "Foi amplamente ignorada",
+            "Aboliu a escravidão",
+            "Acabou com o comércio interno"
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "Por aproximadamente quanto tempo a escravidão existiu no Brasil?",
+        alternativas: [
+            "50 anos",
+            "100 anos",
+            "200 anos",
+            "Quase 400 anos"
+        ],
+        correta: 3
+    },
+
+    {
+        pergunta: "Qual região brasileira teve grande expansão da produção de café no Segundo Reinado?",
+        alternativas: [
+            "Sudeste",
+            "Norte",
+            "Sul",
+            "Nordeste"
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "O crescimento do café aumentou a necessidade de:",
+        alternativas: [
+            "Mão de obra nas fazendas",
+            "Fim das plantações",
+            "Redução do comércio interno",
+            "Fim do trabalho agrícola"
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "Qual foi uma consequência do fim do tráfico transatlântico em 1850?",
+        alternativas: [
+            "Fim imediato da escravidão",
+            "Crescimento do comércio interno de escravizados",
+            "Fim da produção de café",
+            "Fim da agricultura"
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "Qual lei tinha relação com os filhos de mulheres escravizadas?",
+        alternativas: [
+            "Lei do Ventre Livre",
+            "Lei dos Sexagenários",
+            "Lei Áurea",
+            "Lei Eusébio de Queirós"
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "Em que ano foi criada a Lei dos Sexagenários?",
+        alternativas: [
+            "1850",
+            "1871",
+            "1885",
+            "1888"
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "Por que a liberdade prevista para os sexagenários tinha limitações práticas?",
+        alternativas: [
+            "Porque havia condições para a liberdade e poucos chegavam a essa idade",
+            "Porque a lei libertava apenas crianças",
+            "Porque a lei proibia a liberdade",
+            "Porque a escravidão já havia acabado"
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "Qual foi o principal efeito da Lei Áurea?",
+        alternativas: [
+            "Proibiu o tráfico",
+            "Libertou apenas crianças",
+            "Extinguiu legalmente a escravidão",
+            "Criou o trabalho escravizado"
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "A Lei Áurea foi assinada em qual mês?",
+        alternativas: [
+            "Janeiro",
+            "Maio",
+            "Agosto",
+            "Novembro"
+        ],
+        correta: 1
+    },
+
+    {
+        pergunta: "Qual era uma característica das leis abolicionistas anteriores à Lei Áurea?",
+        alternativas: [
+            "Eram medidas graduais e parciais",
+            "Libertavam todos imediatamente",
+            "Proibiam o trabalho livre",
+            "Aumentavam o tráfico"
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "A abolição de 1888 resolveu imediatamente a exclusão social e econômica da população negra?",
+        alternativas: [
+            "Sim, completamente",
+            "Sim, mas somente no Sudeste",
+            "Não, a exclusão continuou",
+            "Sim, por meio da distribuição de terras"
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "Qual grupo tinha grande influência política durante o período escravista?",
+        alternativas: [
+            "Grandes proprietários de escravizados",
+            "Operários industriais",
+            "Trabalhadores assalariados urbanos",
+            "Pequenos comerciantes"
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "Qual fator ajudou a manter a escravidão por tanto tempo?",
+        alternativas: [
+            "Dependência econômica da mão de obra escravizada",
+            "Ausência total de produção agrícola",
+            "Fim do comércio de café",
+            "Falta de propriedades rurais"
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "Qual foi o intervalo entre a Lei dos Sexagenários e a Lei Áurea?",
+        alternativas: [
+            "1 ano",
+            "2 anos",
+            "3 anos",
+            "5 anos"
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "Qual sequência apresenta corretamente os anos dos principais marcos?",
+        alternativas: [
+            "1822, 1831, 1850, 1871, 1885, 1888",
+            "1831, 1822, 1871, 1850, 1888, 1885",
+            "1850, 1822, 1888, 1831, 1871, 1885",
+            "1871, 1850, 1831, 1885, 1822, 1888"
+        ],
+        correta: 0
+    }
+
+];
+
+
+// =====================================================
+// VARIÁVEIS
+// =====================================================
+
+let perguntas = perguntas1;
+
+
+// =====================================================
+// MOSTRAR PERGUNTAS
+// =====================================================
+
+function mostrarPerguntas() {
+
+    const quiz = document.getElementById("quiz");
+
+    quiz.innerHTML = "";
+
+    perguntas.forEach((questao, numero) => {
+
+        const div = document.createElement("div");
+
+        div.classList.add("questao");
+
+        div.innerHTML = `
+            <h2>
+                ${numero + 1}. ${questao.pergunta}
+            </h2>
+
+            ${questao.alternativas.map((alternativa, indice) => `
+
+                <label class="alternativa">
+
+                    <input
+                        type="radio"
+                        name="questao${numero}"
+                        value="${indice}"
+                        onchange="selecionar(this)"
+                    >
+
+                    ${String.fromCharCode(65 + indice)})
+                    ${alternativa}
+
+                </label>
+
+            `).join("")}
+        `;
+
+        quiz.appendChild(div);
+
+    });
+
+}
+
+
+// =====================================================
+// SELECIONAR ALTERNATIVA
+// =====================================================
+
+function selecionar(input) {
+
+    const alternativas = input
+        .closest(".questao")
+        .querySelectorAll(".alternativa");
+
+    alternativas.forEach(alternativa => {
+
+        alternativa.classList.remove("selecionada");
+
+    });
+
+    input
+        .closest(".alternativa")
+        .classList.add("selecionada");
+
+}
+
+
+// =====================================================
+// FINALIZAR QUIZ
+// =====================================================
+
+function finalizarQuiz() {
+
+    let acertos = 0;
+
+    perguntas.forEach((questao, numero) => {
+
+        const resposta = document.querySelector(
+            `input[name="questao${numero}"]:checked`
+        );
+
+        if (resposta) {
+
+            const escolhida = Number(resposta.value);
+
+            if (escolhida === questao.correta) {
+
+                acertos++;
+
+            }
+
+        }
+
+    });
+
+
+    const resultado = document.getElementById("resultado");
+
+    resultado.style.display = "block";
+
+
+    let html = `
+
+        <h2>📊 Resultado</h2>
+
+        <div class="nota">
+            ${acertos}/20
+        </div>
+
+        <p>✅ Você acertou: <strong>${acertos}</strong></p>
+
+        <p style="margin-top:8px;">
+            ❌ Você errou:
+            <strong>${20 - acertos}</strong>
+        </p>
+
+    `;
+
+
+    if (acertos === 20) {
+
+        html += `
+
+            <div class="parabens">
+                🏆 PARABÉNS! Você acertou todas!
+            </div>
+
+        `;
+
+    }
+
+
+    html += `
+
+        <h2 class="titulo-resultado">
+            📋 Confira suas respostas
+        </h2>
+
+    `;
+
+
+    perguntas.forEach((questao, numero) => {
+
+        const resposta = document.querySelector(
+            `input[name="questao${numero}"]:checked`
+        );
+
+        let respostaUsuario;
+
+        let acertou = false;
+
+
+        if (resposta) {
+
+            const indice = Number(resposta.value);
+
+            respostaUsuario =
+                questao.alternativas[indice];
+
+            acertou =
+                indice === questao.correta;
+
+        } else {
+
+            respostaUsuario =
+                "Não respondeu";
+
+        }
+
+
+        html += `
+
+            <div class="resposta ${acertou ? "acertou" : "errou"}">
+
+                <strong>
+                    Questão ${numero + 1}
+                    ${acertou ? "✅ ACERTOU" : "❌ ERROU"}
+                </strong>
+
+                <p style="margin-top:10px;">
+                    ${questao.pergunta}
+                </p>
+
+                <p class="${acertou ? "correto" : "errado"}">
+
+                    ${acertou ? "✅" : "❌"}
+
+                    Sua resposta:
+                    ${respostaUsuario}
+
+                </p>
+
+                <p class="correto">
+
+                    ✅ Resposta correta:
+                    ${questao.alternativas[questao.correta]}
+
+                </p>
+
+            </div>
+
+        `;
+
+    });
+
+
+    resultado.innerHTML = html;
+
+
+    document.getElementById("refazer").style.display =
+        "block";
+
+
+    resultado.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+// =====================================================
+// REFAZER COM OUTRAS PERGUNTAS
+// =====================================================
+
+function refazerQuiz() {
+
+    perguntas = perguntas2;
+
+
+    document.getElementById("resultado").style.display =
+        "none";
+
+
+    document.getElementById("refazer").style.display =
+        "none";
+
+
+    mostrarPerguntas();
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+// =====================================================
+// INICIAR QUIZ
+// =====================================================
+
+mostrarPerguntas();
+
+</script>
+
+</body>
+</html>
