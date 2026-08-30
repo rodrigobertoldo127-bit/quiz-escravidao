@@ -2,184 +2,314 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Quiz - Escravidão no Brasil</title>
+<title>Quiz - Escravidão no Brasil</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        body {
-            background: #111827;
-            color: white;
-            min-height: 100vh;
-            padding: 30px 15px;
-        }
+<style>
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .titulo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+body {
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+}
 
-        .titulo h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+}
 
-        .titulo p {
-            color: #9ca3af;
-        }
+.card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
 
-        .questao {
-            background: #1f2937;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
+h1 {
+    text-align: center;
+}
 
-        .questao h2 {
-            font-size: 19px;
-            margin-bottom: 20px;
-        }
+h2 {
+    margin-top: 25px;
+}
 
-        .alternativa {
-            display: block;
-            background: #374151;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+.subtitulo {
+    text-align: center;
+    color: #cbd5e1;
+}
 
-        .alternativa:hover {
-            background: #4b5563;
-        }
+input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    margin: 10px 0;
+    font-size: 16px;
+}
 
-        .alternativa input {
-            margin-right: 10px;
-        }
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #22c55e;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .alternativa.selecionada {
-            background: #2563eb;
-        }
+button:hover {
+    filter: brightness(1.1);
+}
 
-        button {
-            width: 100%;
-            padding: 17px;
-            border: none;
-            border-radius: 12px;
-            background: #2563eb;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+.azul {
+    background: #3b82f6;
+}
 
-        button:hover {
-            background: #1d4ed8;
-        }
+.question {
+    background: rgba(0,0,0,0.18);
+    padding: 18px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+}
 
-        #refazer {
-            background: #16a34a;
-            display: none;
-            margin-top: 15px;
-        }
+.question h3 {
+    line-height: 1.4;
+}
 
-        #refazer:hover {
-            background: #15803d;
-        }
+label {
+    display: block;
+    padding: 13px;
+    margin: 8px 0;
+    border-radius: 9px;
+    background: rgba(255,255,255,0.08);
+    cursor: pointer;
+}
 
-        #resultado {
-            display: none;
-            background: #1f2937;
-            padding: 25px;
-            border-radius: 15px;
-            margin-top: 30px;
-        }
+label:hover {
+    background: rgba(255,255,255,0.16);
+}
 
-        #resultado h2 {
-            margin-bottom: 15px;
-        }
+input[type="radio"] {
+    margin-right: 8px;
+}
 
-        .nota {
-            font-size: 30px;
-            font-weight: bold;
-            margin: 15px 0;
-        }
+.resultado {
+    text-align: center;
+    font-size: 20px;
+    line-height: 1.8;
+    padding: 20px;
+    background: rgba(34,197,94,0.15);
+    border-radius: 15px;
+}
 
-        .resposta {
-            background: #374151;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 12px 0;
-        }
+.erro {
+    text-align: center;
+    color: #f87171;
+    font-weight: bold;
+}
 
-        .acertou {
-            border-left: 5px solid #22c55e;
-        }
+.sucesso {
+    text-align: center;
+    color: #4ade80;
+    font-weight: bold;
+}
 
-        .errou {
-            border-left: 5px solid #ef4444;
-        }
+.loading {
+    text-align: center;
+    color: #cbd5e1;
+}
 
-        .errado {
-            color: #f87171;
-            margin-top: 8px;
-        }
+.hidden {
+    display: none;
+}
 
-        .correto {
-            color: #4ade80;
-            margin-top: 8px;
-        }
+.aviso-placar {
+    text-align: center;
+    margin-top: 18px;
+    color: #facc15;
+    font-weight: bold;
+}
 
-        .parabens {
-            background: #166534;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 15px;
-            text-align: center;
-            font-size: 18px;
-        }
+.ranking-header,
+.ranking-item {
+    display: grid;
+    grid-template-columns: 60px 1fr 100px 100px 100px;
+    gap: 8px;
+    align-items: center;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
 
-        .titulo-resultado {
-            margin-top: 25px;
-        }
-    </style>
+.ranking-header {
+    background: rgba(255,255,255,0.15);
+    font-weight: bold;
+}
+
+.ranking-item {
+    background: rgba(255,255,255,0.08);
+}
+
+.primeiro {
+    border: 2px solid #facc15;
+}
+
+.segundo {
+    border: 2px solid #cbd5e1;
+}
+
+.terceiro {
+    border: 2px solid #cd7f32;
+}
+
+.nome {
+    font-weight: bold;
+}
+
+.total {
+    font-weight: bold;
+}
+
+@media (max-width: 650px) {
+
+    .ranking-header,
+    .ranking-item {
+        grid-template-columns: 40px 1fr 65px 65px 65px;
+        font-size: 12px;
+        padding: 10px 5px;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="titulo">
-        <h1>📚 Quiz: Escravidão no Brasil</h1>
-        <p>Responda às 20 questões e veja seu resultado no final.</p>
-    </div>
+<!-- INÍCIO -->
 
-    <div id="quiz"></div>
+<div id="inicio" class="card">
 
-    <button onclick="finalizarQuiz()">
-        ✅ Finalizar Quiz
-    </button>
+<h1>🇧🇷 Quiz - Escravidão no Brasil</h1>
 
-    <div id="resultado"></div>
+<p class="subtitulo">
+Do Império à Lei Áurea
+</p>
 
-    <button id="refazer" onclick="refazerQuiz()">
-        🔄 Refazer Quiz com outras perguntas
-    </button>
+<h2>👤 Digite seu nome</h2>
+
+<input
+type="text"
+id="nome"
+maxlength="30"
+placeholder="Digite seu nome"
+>
+
+<button onclick="comecar()">
+Começar Quiz
+</button>
+
+<p id="erroNome" class="erro"></p>
+
+</div>
+
+
+<!-- QUIZ -->
+
+<div id="quiz" class="card hidden">
+
+<h1 id="tituloQuiz"></h1>
+
+<div id="perguntas"></div>
+
+<button onclick="finalizar()">
+Finalizar Questionário
+</button>
+
+<p id="erroQuiz" class="erro"></p>
+
+</div>
+
+
+<!-- RESULTADO -->
+
+<div id="resultadoTela" class="card hidden">
+
+<h1>📊 Resultado</h1>
+
+<div id="resultado" class="resultado"></div>
+
+<p id="statusSalvar"></p>
+
+<button
+id="btnSegundo"
+class="azul"
+onclick="segundoQuiz()"
+>
+🔄 Fazer segundo questionário
+</button>
+
+<p id="avisoPlacar" class="aviso-placar hidden">
+🏆 O placar só estará disponível após o segundo questionário!
+</p>
+
+</div>
+
+
+<!-- PLACAR -->
+
+<div id="placar" class="card hidden">
+
+<h1>🏆 Placar Geral</h1>
+
+<p class="subtitulo">
+Ranking dos participantes
+</p>
+
+<div class="ranking-header">
+
+<div>#</div>
+<div>Nome</div>
+<div>Quiz 1</div>
+<div>Quiz 2</div>
+<div>Total</div>
+
+</div>
+
+<div id="rankingLista">
+
+<p class="loading">
+Carregando placar...
+</p>
+
+</div>
+
+<button
+class="azul"
+onclick="carregarPlacar()"
+>
+🔄 Atualizar Placar
+</button>
+
+</div>
 
 </div>
 
@@ -187,727 +317,1040 @@
 <script>
 
 
-// =====================================================
-// QUIZ 1
-// =====================================================
+/* =====================================================
+SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://tspzsmazcdxmxqnpwwsv.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_HVNEQLVhtX4eGxIZyUkmWQ_WgF30myg";
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+/* =====================================================
+VARIÁVEIS
+===================================================== */
+
+let nomeJogador = "";
+
+let quizAtual = 1;
+
+let notaPrimeiro = 0;
+
+let notaSegundo = 0;
+
+
+/* =====================================================
+QUIZ 1
+===================================================== */
 
 const perguntas1 = [
 
-    {
-        pergunta: "O que aconteceu com a escravidão após a Independência do Brasil, em 1822?",
-        alternativas: [
-            "Foi imediatamente abolida.",
-            "Foi mantida.",
-            "Foi proibida apenas nas cidades.",
-            "Foi substituída pelo trabalho assalariado."
-        ],
-        correta: 1
-    },
+{
+pergunta: "Por aproximadamente quanto tempo a escravidão existiu no Brasil?",
+alternativas: [
+"50 anos",
+"100 anos",
+"Quase 400 anos",
+"20 anos"
+],
+correta: 2
+},
 
-    {
-        pergunta: "A Constituição de 1824:",
-        alternativas: [
-            "Aboliu a escravidão.",
-            "Proibiu o tráfico negreiro.",
-            "Manteve a escravidão.",
-            "Libertou todos os escravizados."
-        ],
-        correta: 2
-    },
+{
+pergunta: "A Constituição de 1824 manteve a escravidão?",
+alternativas: [
+"Sim",
+"Não",
+"Acabou com ela",
+"Proibiu o tráfico"
+],
+correta: 0
+},
 
-    {
-        pergunta: "A lei de 1831 tinha como objetivo:",
-        alternativas: [
-            "Acabar com o café.",
-            "Proibir o tráfico de pessoas escravizadas.",
-            "Libertar os escravizados com mais de 60 anos.",
-            "Criar a Lei do Ventre Livre."
-        ],
-        correta: 1
-    },
+{
+pergunta: "O que aconteceu com o tráfico de pessoas escravizadas após a Independência?",
+alternativas: [
+"Acabou imediatamente",
+"Continuou em grande escala",
+"Foi proibido definitivamente",
+"Nunca mais aconteceu"
+],
+correta: 1
+},
 
-    {
-        pergunta: "O que aconteceu com a lei de 1831?",
-        alternativas: [
-            "Foi totalmente cumprida.",
-            "Foi ignorada e o tráfico continuou.",
-            "Foi cancelada pela Inglaterra.",
-            "Acabou com a escravidão."
-        ],
-        correta: 1
-    },
+{
+pergunta: "Qual país pressionava o Brasil pelo fim do tráfico?",
+alternativas: [
+"França",
+"Inglaterra",
+"Portugal",
+"Espanha"
+],
+correta: 1
+},
 
-    {
-        pergunta: "Durante o Segundo Reinado, qual produto se destacou na economia brasileira?",
-        alternativas: [
-            "Café.",
-            "Petróleo.",
-            "Borracha.",
-            "Carvão."
-        ],
-        correta: 0
-    },
+{
+pergunta: "O que a lei de 1831 determinava?",
+alternativas: [
+"O fim da escravidão",
+"A proibição do tráfico",
+"A liberdade dos idosos",
+"A Lei Áurea"
+],
+correta: 1
+},
 
-    {
-        pergunta: "A escravidão continuou por tanto tempo principalmente porque:",
-        alternativas: [
-            "A economia dependia da mão de obra escravizada.",
-            "Não existiam trabalhadores livres.",
-            "A população era contra a abolição.",
-            "A Inglaterra obrigava o Brasil a manter a escravidão."
-        ],
-        correta: 0
-    },
+{
+pergunta: "A lei de 1831 foi realmente cumprida?",
+alternativas: [
+"Sim, imediatamente",
+"Não, foi amplamente ignorada",
+"Sim, em todo o país",
+"Foi cancelada pela Inglaterra"
+],
+correta: 1
+},
 
-    {
-        pergunta: "O tráfico negreiro acabou efetivamente em 1850 com a:",
-        alternativas: [
-            "Lei Áurea.",
-            "Lei do Ventre Livre.",
-            "Lei Eusébio de Queirós.",
-            "Lei dos Sexagenários."
-        ],
-        correta: 2
-    },
+{
+pergunta: "O que continuou acontecendo mesmo após a proibição do tráfico?",
+alternativas: [
+"Contrabando de pessoas escravizadas",
+"Fim da escravidão",
+"Liberdade geral",
+"Fim das plantações"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Após o fim do tráfico negreiro em 1850, a escravidão:",
-        alternativas: [
-            "Acabou imediatamente.",
-            "Continuou por meio do comércio interno de pessoas escravizadas.",
-            "Foi proibida somente no Nordeste.",
-            "Deixou de existir nas fazendas de café."
-        ],
-        correta: 1
-    },
+{
+pergunta: "Qual atividade econômica passou a ter grande destaque no Segundo Reinado?",
+alternativas: [
+"Café",
+"Pesca",
+"Mineração de prata",
+"Petróleo"
+],
+correta: 0
+},
 
-    {
-        pergunta: "O comércio interno de pessoas escravizadas aumentou principalmente do:",
-        alternativas: [
-            "Sudeste para o Nordeste.",
-            "Nordeste para o Sudeste.",
-            "Sul para o Nordeste.",
-            "Norte para o Sul."
-        ],
-        correta: 1
-    },
+{
+pergunta: "Quando o tráfico negreiro acabou de fato no Brasil?",
+alternativas: [
+"1822",
+"1831",
+"1850",
+"1888"
+],
+correta: 2
+},
 
-    {
-        pergunta: "A Lei do Ventre Livre foi criada em:",
-        alternativas: [
-            "1822.",
-            "1850.",
-            "1871.",
-            "1888."
-        ],
-        correta: 2
-    },
+{
+pergunta: "Qual lei acabou definitivamente com o tráfico em 1850?",
+alternativas: [
+"Lei Áurea",
+"Lei do Ventre Livre",
+"Lei Eusébio de Queirós",
+"Lei dos Sexagenários"
+],
+correta: 2
+},
 
-    {
-        pergunta: "A Lei do Ventre Livre determinava que:",
-        alternativas: [
-            "Todos os escravizados seriam libertados imediatamente.",
-            "Filhos de mulheres escravizadas nasceriam livres.",
-            "Pessoas com mais de 60 anos seriam libertadas.",
-            "O tráfico negreiro seria permitido."
-        ],
-        correta: 1
-    },
+{
+pergunta: "Após o fim do tráfico atlântico, o que cresceu?",
+alternativas: [
+"O comércio interno de pessoas escravizadas",
+"A liberdade imediata",
+"A imigração africana livre",
+"O fim do café"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Na prática, a Lei do Ventre Livre:",
-        alternativas: [
-            "Acabou imediatamente com a escravidão.",
-            "Permitiu que os filhos permanecessem sob a guarda dos senhores por anos.",
-            "Libertou todos os adultos escravizados.",
-            "Proibiu o trabalho nas plantações."
-        ],
-        correta: 1
-    },
+{
+pergunta: "Para onde muitas pessoas escravizadas foram levadas no comércio interno?",
+alternativas: [
+"Do Sudeste para o Nordeste",
+"Do Nordeste para o Sudeste",
+"Do Sul para a Europa",
+"Da Bahia para Portugal"
+],
+correta: 1
+},
 
-    {
-        pergunta: "A Lei dos Sexagenários, de 1885, determinava a liberdade para:",
-        alternativas: [
-            "Crianças menores de 10 anos.",
-            "Pessoas escravizadas com 60 anos ou mais.",
-            "Todos os escravizados do Brasil.",
-            "Apenas escravizados que trabalhavam no café."
-        ],
-        correta: 1
-    },
+{
+pergunta: "Qual produto era chamado de 'ouro branco' no Segundo Reinado?",
+alternativas: [
+"Açúcar",
+"Café",
+"Algodão",
+"Ouro"
+],
+correta: 1
+},
 
-    {
-        pergunta: "Por que a Lei dos Sexagenários teve pouco impacto?",
-        alternativas: [
-            "Porque poucos escravizados chegavam aos 60 anos e havia condições para a liberdade.",
-            "Porque foi criada depois da Lei Áurea.",
-            "Porque libertava apenas crianças.",
-            "Porque proibia a liberdade dos idosos."
-        ],
-        correta: 0
-    },
+{
+pergunta: "O que estabeleceu a Lei do Ventre Livre de 1871?",
+alternativas: [
+"Liberdade para todos",
+"Filhos de mulheres escravizadas nasceriam livres",
+"Fim do tráfico",
+"Liberdade para maiores de 60 anos"
+],
+correta: 1
+},
 
-    {
-        pergunta: "Qual foi a lei que acabou definitivamente com a escravidão no Brasil?",
-        alternativas: [
-            "Lei Eusébio de Queirós.",
-            "Lei do Ventre Livre.",
-            "Lei dos Sexagenários.",
-            "Lei Áurea."
-        ],
-        correta: 3
-    },
+{
+pergunta: "Em que ano foi aprovada a Lei do Ventre Livre?",
+alternativas: [
+"1850",
+"1871",
+"1885",
+"1888"
+],
+correta: 1
+},
 
-    {
-        pergunta: "A Lei Áurea foi assinada em:",
-        alternativas: [
-            "7 de setembro de 1822.",
-            "13 de maio de 1888.",
-            "15 de novembro de 1889.",
-            "21 de abril de 1885."
-        ],
-        correta: 1
-    },
+{
+pergunta: "O que a Lei dos Sexagenários determinava?",
+alternativas: [
+"Liberdade para escravizados com 60 anos ou mais",
+"Liberdade para todas as crianças",
+"Fim do tráfico",
+"Fim imediato da escravidão"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Quem assinou a Lei Áurea?",
-        alternativas: [
-            "Dom Pedro I.",
-            "Dom Pedro II.",
-            "Princesa Isabel.",
-            "Marechal Deodoro da Fonseca."
-        ],
-        correta: 2
-    },
+{
+pergunta: "Em que ano foi aprovada a Lei dos Sexagenários?",
+alternativas: [
+"1871",
+"1885",
+"1888",
+"1850"
+],
+correta: 1
+},
 
-    {
-        pergunta: "Qual das alternativas apresenta um motivo para a escravidão ter durado tanto no Brasil?",
-        alternativas: [
-            "A elite política era formada, em grande parte, por proprietários de escravizados.",
-            "A população escravizada não trabalhava na economia.",
-            "O café não precisava de mão de obra.",
-            "O Brasil não sofria pressão externa."
-        ],
-        correta: 0
-    },
+{
+pergunta: "Em que data foi assinada a Lei Áurea?",
+alternativas: [
+"7 de setembro de 1822",
+"13 de maio de 1888",
+"15 de novembro de 1889",
+"7 de abril de 1831"
+],
+correta: 1
+},
 
-    {
-        pergunta: "O que aconteceu com a população negra após a abolição em 1888?",
-        alternativas: [
-            "Recebeu terras e apoio do governo.",
-            "Foi imediatamente integrada à sociedade com igualdade econômica.",
-            "Continuou enfrentando exclusão social e econômica.",
-            "Recebeu indenização dos proprietários."
-        ],
-        correta: 2
-    },
+{
+pergunta: "Quem assinou a Lei Áurea?",
+alternativas: [
+"D. Pedro I",
+"D. Pedro II",
+"Princesa Isabel",
+"Deodoro da Fonseca"
+],
+correta: 2
+},
 
-    {
-        pergunta: "Qual sequência apresenta corretamente os principais acontecimentos?",
-        alternativas: [
-            "1822 — Lei Áurea / 1850 — Independência / 1888 — Lei do Ventre Livre.",
-            "1831 — Lei Áurea / 1871 — fim do tráfico / 1885 — Independência.",
-            "1850 — Lei Eusébio de Queirós / 1871 — Lei do Ventre Livre / 1885 — Lei dos Sexagenários / 1888 — Lei Áurea.",
-            "1871 — Lei Eusébio de Queirós / 1885 — Lei Áurea / 1888 — Lei do Ventre Livre."
-        ],
-        correta: 2
-    }
+{
+pergunta: "A Lei Áurea extinguiu a escravidão no Brasil?",
+alternativas: [
+"Sim",
+"Não",
+"Somente no Sudeste",
+"Somente nas cidades"
+],
+correta: 0
+}
 
 ];
 
 
-// =====================================================
-// QUIZ 2
-// =====================================================
+/* =====================================================
+QUIZ 2
+===================================================== */
 
 const perguntas2 = [
 
-    {
-        pergunta: "Qual era uma das principais bases da economia brasileira durante o período escravista?",
-        alternativas: [
-            "Mão de obra escravizada",
-            "Trabalho exclusivamente industrial",
-            "Tecnologia agrícola moderna",
-            "Trabalho exclusivamente voluntário"
-        ],
-        correta: 0
-    },
+{
+pergunta: "Qual era uma das principais razões para a manutenção da escravidão?",
+alternativas: [
+"Dependência econômica",
+"Falta de terras",
+"Ausência de agricultura",
+"Excesso de trabalhadores livres"
+],
+correta: 0
+},
 
-    {
-        pergunta: "O que a Constituição de 1824 fez em relação à escravidão?",
-        alternativas: [
-            "Aboliu a escravidão",
-            "Manteve a escravidão",
-            "Proibiu o café",
-            "Libertou os idosos"
-        ],
-        correta: 1
-    },
+{
+pergunta: "Quem possuía grande influência política durante o Império?",
+alternativas: [
+"Grandes proprietários de escravizados",
+"Trabalhadores urbanos",
+"Imigrantes pobres",
+"Camponeses livres"
+],
+correta: 0
+},
 
-    {
-        pergunta: "A pressão inglesa contribuiu principalmente para:",
-        alternativas: [
-            "A manutenção do tráfico",
-            "O combate ao tráfico negreiro",
-            "A criação da Lei do Ventre Livre",
-            "A criação da República"
-        ],
-        correta: 1
-    },
+{
+pergunta: "Por que a elite brasileira resistia à abolição?",
+alternativas: [
+"Porque dependia da mão de obra escravizada",
+"Porque não havia agricultura",
+"Porque queria acabar com o café",
+"Porque defendia a República"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Qual lei de 1831 proibiu o tráfico de pessoas escravizadas?",
-        alternativas: [
-            "Lei Áurea",
-            "Lei Eusébio de Queirós",
-            "Lei de 1831",
-            "Lei dos Sexagenários"
-        ],
-        correta: 2
-    },
+{
+pergunta: "Qual produto se tornou o principal produto de exportação durante o Segundo Reinado?",
+alternativas: [
+"Café",
+"Ouro",
+"Algodão",
+"Madeira"
+],
+correta: 0
+},
 
-    {
-        pergunta: "O que aconteceu com a proibição do tráfico de 1831?",
-        alternativas: [
-            "Foi totalmente respeitada",
-            "Foi amplamente ignorada",
-            "Aboliu a escravidão",
-            "Acabou com o comércio interno"
-        ],
-        correta: 1
-    },
+{
+pergunta: "O que aconteceu com a escravidão depois de 1850?",
+alternativas: [
+"Continuou existindo",
+"Terminou imediatamente",
+"Foi proibida em todo o mundo",
+"Todos foram libertados"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Por aproximadamente quanto tempo a escravidão existiu no Brasil?",
-        alternativas: [
-            "50 anos",
-            "100 anos",
-            "200 anos",
-            "Quase 400 anos"
-        ],
-        correta: 3
-    },
+{
+pergunta: "O que cresceu depois do fim do tráfico atlântico?",
+alternativas: [
+"O comércio interno de escravizados",
+"A liberdade dos escravizados",
+"A produção de petróleo",
+"O trabalho assalariado em todo o país"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Qual região brasileira teve grande expansão da produção de café no Segundo Reinado?",
-        alternativas: [
-            "Sudeste",
-            "Norte",
-            "Sul",
-            "Nordeste"
-        ],
-        correta: 0
-    },
+{
+pergunta: "A Lei Eusébio de Queirós foi aprovada em:",
+alternativas: [
+"1831",
+"1850",
+"1871",
+"1888"
+],
+correta: 1
+},
 
-    {
-        pergunta: "O crescimento do café aumentou a necessidade de:",
-        alternativas: [
-            "Mão de obra nas fazendas",
-            "Fim das plantações",
-            "Redução do comércio interno",
-            "Fim do trabalho agrícola"
-        ],
-        correta: 0
-    },
+{
+pergunta: "A Lei Eusébio de Queirós estava relacionada a:",
+alternativas: [
+"Fim do tráfico negreiro",
+"Fim da escravidão",
+"Liberdade dos sexagenários",
+"Independência"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Qual foi uma consequência do fim do tráfico transatlântico em 1850?",
-        alternativas: [
-            "Fim imediato da escravidão",
-            "Crescimento do comércio interno de escravizados",
-            "Fim da produção de café",
-            "Fim da agricultura"
-        ],
-        correta: 1
-    },
+{
+pergunta: "Qual lei libertava, em princípio, os filhos de mulheres escravizadas nascidos a partir de sua aprovação?",
+alternativas: [
+"Lei Áurea",
+"Lei do Ventre Livre",
+"Lei Eusébio de Queirós",
+"Lei dos Sexagenários"
+],
+correta: 1
+},
 
-    {
-        pergunta: "Qual lei tinha relação com os filhos de mulheres escravizadas?",
-        alternativas: [
-            "Lei do Ventre Livre",
-            "Lei dos Sexagenários",
-            "Lei Áurea",
-            "Lei Eusébio de Queirós"
-        ],
-        correta: 0
-    },
+{
+pergunta: "Qual lei ficou conhecida como uma medida de liberdade gradual para pessoas com 60 anos ou mais?",
+alternativas: [
+"Lei do Ventre Livre",
+"Lei Áurea",
+"Lei dos Sexagenários",
+"Lei Eusébio de Queirós"
+],
+correta: 2
+},
 
-    {
-        pergunta: "Em que ano foi criada a Lei dos Sexagenários?",
-        alternativas: [
-            "1850",
-            "1871",
-            "1885",
-            "1888"
-        ],
-        correta: 2
-    },
+{
+pergunta: "Qual foi uma consequência da Lei do Ventre Livre na prática?",
+alternativas: [
+"Muitos filhos continuavam sob controle dos senhores por anos",
+"Todos ficaram imediatamente independentes",
+"O tráfico voltou",
+"A escravidão acabou"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Por que a liberdade prevista para os sexagenários tinha limitações práticas?",
-        alternativas: [
-            "Porque havia condições para a liberdade e poucos chegavam a essa idade",
-            "Porque a lei libertava apenas crianças",
-            "Porque a lei proibia a liberdade",
-            "Porque a escravidão já havia acabado"
-        ],
-        correta: 0
-    },
+{
+pergunta: "Por que a Lei dos Sexagenários teve alcance limitado?",
+alternativas: [
+"Poucos escravizados chegavam aos 60 anos",
+"Não existiam escravizados",
+"Foi criada em 1822",
+"Todos eram libertados aos 30"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Qual foi o principal efeito da Lei Áurea?",
-        alternativas: [
-            "Proibiu o tráfico",
-            "Libertou apenas crianças",
-            "Extinguiu legalmente a escravidão",
-            "Criou o trabalho escravizado"
-        ],
-        correta: 2
-    },
+{
+pergunta: "A abolição ocorreu de forma:",
+alternativas: [
+"Imediata desde 1822",
+"Lenta e gradual",
+"Antes da Independência",
+"Sem nenhuma lei"
+],
+correta: 1
+},
 
-    {
-        pergunta: "A Lei Áurea foi assinada em qual mês?",
-        alternativas: [
-            "Janeiro",
-            "Maio",
-            "Agosto",
-            "Novembro"
-        ],
-        correta: 1
-    },
+{
+pergunta: "Qual foi a última lei que aboliu oficialmente a escravidão?",
+alternativas: [
+"Lei Eusébio de Queirós",
+"Lei do Ventre Livre",
+"Lei dos Sexagenários",
+"Lei Áurea"
+],
+correta: 3
+},
 
-    {
-        pergunta: "Qual era uma característica das leis abolicionistas anteriores à Lei Áurea?",
-        alternativas: [
-            "Eram medidas graduais e parciais",
-            "Libertavam todos imediatamente",
-            "Proibiam o trabalho livre",
-            "Aumentavam o tráfico"
-        ],
-        correta: 0
-    },
+{
+pergunta: "Em que ano ocorreu a abolição definitiva?",
+alternativas: [
+"1850",
+"1871",
+"1885",
+"1888"
+],
+correta: 3
+},
 
-    {
-        pergunta: "A abolição de 1888 resolveu imediatamente a exclusão social e econômica da população negra?",
-        alternativas: [
-            "Sim, completamente",
-            "Sim, mas somente no Sudeste",
-            "Não, a exclusão continuou",
-            "Sim, por meio da distribuição de terras"
-        ],
-        correta: 2
-    },
+{
+pergunta: "A Lei Áurea determinou:",
+alternativas: [
+"O fim da escravidão",
+"O fim do café",
+"O início do Império",
+"O retorno do tráfico"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Qual grupo tinha grande influência política durante o período escravista?",
-        alternativas: [
-            "Grandes proprietários de escravizados",
-            "Operários industriais",
-            "Trabalhadores assalariados urbanos",
-            "Pequenos comerciantes"
-        ],
-        correta: 0
-    },
+{
+pergunta: "Depois da abolição, houve uma política ampla de integração social e distribuição de terras aos libertos?",
+alternativas: [
+"Sim",
+"Não",
+"Somente no Nordeste",
+"Somente no Sul"
+],
+correta: 1
+},
 
-    {
-        pergunta: "Qual fator ajudou a manter a escravidão por tanto tempo?",
-        alternativas: [
-            "Dependência econômica da mão de obra escravizada",
-            "Ausência total de produção agrícola",
-            "Fim do comércio de café",
-            "Falta de propriedades rurais"
-        ],
-        correta: 0
-    },
+{
+pergunta: "A falta de políticas de integração contribuiu para:",
+alternativas: [
+"Continuação da exclusão social e econômica",
+"Fim das desigualdades",
+"Enriquecimento imediato de todos",
+"Fim do racismo"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Qual foi o intervalo entre a Lei dos Sexagenários e a Lei Áurea?",
-        alternativas: [
-            "1 ano",
-            "2 anos",
-            "3 anos",
-            "5 anos"
-        ],
-        correta: 2
-    },
+{
+pergunta: "A pressão inglesa contribuiu principalmente para:",
+alternativas: [
+"Acelerar o fim do tráfico",
+"Criar a Lei Áurea diretamente",
+"Acabar com o café",
+"Proclamar a República"
+],
+correta: 0
+},
 
-    {
-        pergunta: "Qual sequência apresenta corretamente os anos dos principais marcos?",
-        alternativas: [
-            "1822, 1831, 1850, 1871, 1885, 1888",
-            "1831, 1822, 1871, 1850, 1888, 1885",
-            "1850, 1822, 1888, 1831, 1871, 1885",
-            "1871, 1850, 1831, 1885, 1822, 1888"
-        ],
-        correta: 0
-    }
+{
+pergunta: "Por que a escravidão demorou tanto para acabar?",
+alternativas: [
+"Porque estava ligada à economia e ao poder político",
+"Porque não havia agricultura",
+"Porque o Brasil não tinha governo",
+"Porque a Inglaterra defendia a escravidão"
+],
+correta: 0
+}
 
 ];
 
 
-// =====================================================
-// VARIÁVEIS
-// =====================================================
+/* =====================================================
+COMEÇAR
+===================================================== */
 
-let perguntas = perguntas1;
+function comecar() {
 
+const nome =
+document.getElementById("nome").value.trim();
 
-// =====================================================
-// MOSTRAR PERGUNTAS
-// =====================================================
+if (!nome) {
 
-function mostrarPerguntas() {
+document.getElementById("erroNome").textContent =
+"Digite seu nome para continuar.";
 
-    const quiz = document.getElementById("quiz");
+return;
 
-    quiz.innerHTML = "";
+}
 
-    perguntas.forEach((questao, numero) => {
+nomeJogador = nome;
 
-        const div = document.createElement("div");
+quizAtual = 1;
 
-        div.classList.add("questao");
+document.getElementById("inicio")
+.classList.add("hidden");
 
-        div.innerHTML = `
-            <h2>
-                ${numero + 1}. ${questao.pergunta}
-            </h2>
+document.getElementById("placar")
+.classList.add("hidden");
 
-            ${questao.alternativas.map((alternativa, indice) => `
+document.getElementById("resultadoTela")
+.classList.add("hidden");
 
-                <label class="alternativa">
+document.getElementById("quiz")
+.classList.remove("hidden");
 
-                    <input
-                        type="radio"
-                        name="questao${numero}"
-                        value="${indice}"
-                        onchange="selecionar(this)"
-                    >
+document.getElementById("tituloQuiz").textContent =
+"📝 Primeiro Questionário";
 
-                    ${String.fromCharCode(65 + indice)})
-                    ${alternativa}
-
-                </label>
-
-            `).join("")}
-        `;
-
-        quiz.appendChild(div);
-
-    });
+mostrarPerguntas(perguntas1);
 
 }
 
 
-// =====================================================
-// SELECIONAR ALTERNATIVA
-// =====================================================
+/* =====================================================
+MOSTRAR PERGUNTAS
+===================================================== */
 
-function selecionar(input) {
+function mostrarPerguntas(lista) {
 
-    const alternativas = input
-        .closest(".questao")
-        .querySelectorAll(".alternativa");
+const area =
+document.getElementById("perguntas");
 
-    alternativas.forEach(alternativa => {
+area.innerHTML = "";
 
-        alternativa.classList.remove("selecionada");
+lista.forEach((q, index) => {
 
-    });
+let html = `
 
-    input
-        .closest(".alternativa")
-        .classList.add("selecionada");
+<div class="question">
+
+<h3>
+${index + 1}. ${q.pergunta}
+</h3>
+
+`;
+
+q.alternativas.forEach((alternativa, i) => {
+
+html += `
+
+<label>
+
+<input
+type="radio"
+name="pergunta${index}"
+value="${i}"
+>
+
+${alternativa}
+
+</label>
+
+`;
+
+});
+
+html += `</div>`;
+
+area.innerHTML += html;
+
+});
+
+window.scrollTo(0,0);
 
 }
 
 
-// =====================================================
-// FINALIZAR QUIZ
-// =====================================================
+/* =====================================================
+FINALIZAR
+===================================================== */
 
-function finalizarQuiz() {
+function finalizar() {
 
-    let acertos = 0;
+const lista =
+quizAtual === 1
+? perguntas1
+: perguntas2;
 
-    perguntas.forEach((questao, numero) => {
+let pontos = 0;
 
-        const resposta = document.querySelector(
-            `input[name="questao${numero}"]:checked`
-        );
+let respondeuTudo = true;
 
-        if (resposta) {
+lista.forEach((q,index) => {
 
-            const escolhida = Number(resposta.value);
+const resposta =
+document.querySelector(
+`input[name="pergunta${index}"]:checked`
+);
 
-            if (escolhida === questao.correta) {
+if (!resposta) {
 
-                acertos++;
+respondeuTudo = false;
 
-            }
+return;
 
-        }
+}
 
-    });
+if (Number(resposta.value) === q.correta) {
 
+pontos++;
 
-    const resultado = document.getElementById("resultado");
+}
 
-    resultado.style.display = "block";
+});
 
+if (!respondeuTudo) {
 
-    let html = `
+document.getElementById("erroQuiz").textContent =
+"Responda todas as 20 perguntas.";
 
-        <h2>📊 Resultado</h2>
+return;
 
-        <div class="nota">
-            ${acertos}/20
-        </div>
+}
 
-        <p>✅ Você acertou: <strong>${acertos}</strong></p>
+document.getElementById("erroQuiz").textContent = "";
 
-        <p style="margin-top:8px;">
-            ❌ Você errou:
-            <strong>${20 - acertos}</strong>
-        </p>
 
-    `;
+/* PRIMEIRO */
 
+if (quizAtual === 1) {
 
-    if (acertos === 20) {
+notaPrimeiro = pontos;
 
-        html += `
+document.getElementById("resultado").innerHTML = `
 
-            <div class="parabens">
-                🏆 PARABÉNS! Você acertou todas!
-            </div>
+<strong>${escaparHTML(nomeJogador)}</strong>
 
-        `;
+<br><br>
 
-    }
+Primeiro questionário:
 
+<br>
 
-    html += `
+<strong>${notaPrimeiro}/20</strong>
 
-        <h2 class="titulo-resultado">
-            📋 Confira suas respostas
-        </h2>
+`;
 
-    `;
+document.getElementById("btnSegundo")
+.style.display = "block";
 
-
-    perguntas.forEach((questao, numero) => {
-
-        const resposta = document.querySelector(
-            `input[name="questao${numero}"]:checked`
-        );
-
-        let respostaUsuario;
-
-        let acertou = false;
-
-
-        if (resposta) {
-
-            const indice = Number(resposta.value);
-
-            respostaUsuario =
-                questao.alternativas[indice];
-
-            acertou =
-                indice === questao.correta;
-
-        } else {
-
-            respostaUsuario =
-                "Não respondeu";
-
-        }
-
-
-        html += `
-
-            <div class="resposta ${acertou ? "acertou" : "errou"}">
-
-                <strong>
-                    Questão ${numero + 1}
-                    ${acertou ? "✅ ACERTOU" : "❌ ERROU"}
-                </strong>
-
-                <p style="margin-top:10px;">
-                    ${questao.pergunta}
-                </p>
-
-                <p class="${acertou ? "correto" : "errado"}">
-
-                    ${acertou ? "✅" : "❌"}
-
-                    Sua resposta:
-                    ${respostaUsuario}
-
-                </p>
-
-                <p class="correto">
-
-                    ✅ Resposta correta:
-                    ${questao.alternativas[questao.correta]}
-
-                </p>
-
-            </div>
-
-        `;
-
-    });
-
-
-    resultado.innerHTML = html;
-
-
-    document.getElementById("refazer").style.display =
-        "block";
-
-
-    resultado.scrollIntoView({
-        behavior: "smooth"
-    });
+document.getElementById("avisoPlacar")
+.classList.remove("hidden");
 
 }
 
 
-// =====================================================
-// REFAZER COM OUTRAS PERGUNTAS
-// =====================================================
+/* SEGUNDO */
 
-function refazerQuiz() {
+else {
 
-    perguntas = perguntas2;
+notaSegundo = pontos;
 
+const total =
+notaPrimeiro + notaSegundo;
 
-    document.getElementById("resultado").style.display =
-        "none";
+document.getElementById("resultado").innerHTML = `
 
+<strong>${escaparHTML(nomeJogador)}</strong>
 
-    document.getElementById("refazer").style.display =
-        "none";
+<br><br>
 
+Primeiro questionário:
 
-    mostrarPerguntas();
+<strong>${notaPrimeiro}/20</strong>
 
+<br>
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+Segundo questionário:
+
+<strong>${notaSegundo}/20</strong>
+
+<br><br>
+
+🏆 Total:
+
+<strong>${total}/40</strong>
+
+`;
+
+document.getElementById("btnSegundo")
+.style.display = "none";
+
+document.getElementById("avisoPlacar")
+.classList.add("hidden");
+
+salvarResultado();
 
 }
 
 
-// =====================================================
-// INICIAR QUIZ
-// =====================================================
+document.getElementById("quiz")
+.classList.add("hidden");
 
-mostrarPerguntas();
+document.getElementById("resultadoTela")
+.classList.remove("hidden");
+
+window.scrollTo(0,0);
+
+}
+
+
+/* =====================================================
+SEGUNDO QUIZ
+===================================================== */
+
+function segundoQuiz() {
+
+quizAtual = 2;
+
+document.getElementById("resultadoTela")
+.classList.add("hidden");
+
+document.getElementById("placar")
+.classList.add("hidden");
+
+document.getElementById("quiz")
+.classList.remove("hidden");
+
+document.getElementById("tituloQuiz").textContent =
+"🔄 Segundo Questionário";
+
+mostrarPerguntas(perguntas2);
+
+}
+
+
+/* =====================================================
+SALVAR
+===================================================== */
+
+async function salvarResultado() {
+
+const total =
+notaPrimeiro + notaSegundo;
+
+const status =
+document.getElementById("statusSalvar");
+
+status.className = "loading";
+
+status.textContent =
+"💾 Salvando resultado...";
+
+try {
+
+const { data: existente, error: erroBusca } =
+
+await supabaseClient
+
+.from("ranking_escravidao")
+
+.select("id")
+
+.eq("nome",nomeJogador)
+
+.maybeSingle();
+
+
+if (erroBusca) {
+
+throw erroBusca;
+
+}
+
+
+if (existente) {
+
+const { error } =
+
+await supabaseClient
+
+.from("ranking_escravidao")
+
+.update({
+
+primeiro_quiz: notaPrimeiro,
+
+segundo_quiz: notaSegundo,
+
+total: total
+
+})
+
+.eq("id",existente.id);
+
+
+if (error) {
+
+throw error;
+
+}
+
+}
+
+else {
+
+const { error } =
+
+await supabaseClient
+
+.from("ranking_escravidao")
+
+.insert({
+
+nome: nomeJogador,
+
+primeiro_quiz: notaPrimeiro,
+
+segundo_quiz: notaSegundo,
+
+total: total
+
+});
+
+
+if (error) {
+
+throw error;
+
+}
+
+}
+
+
+status.className = "sucesso";
+
+status.textContent =
+"✅ Resultado salvo no placar!";
+
+
+document.getElementById("placar")
+.classList.remove("hidden");
+
+carregarPlacar();
+
+
+}
+
+catch (erro) {
+
+console.error(erro);
+
+status.className = "erro";
+
+status.textContent =
+"❌ Erro ao salvar o resultado.";
+
+}
+
+}
+
+
+/* =====================================================
+CARREGAR PLACAR
+===================================================== */
+
+async function carregarPlacar() {
+
+const lista =
+document.getElementById("rankingLista");
+
+lista.innerHTML =
+`<p class="loading">
+Carregando placar...
+</p>`;
+
+
+try {
+
+const { data, error } =
+
+await supabaseClient
+
+.from("ranking_escravidao")
+
+.select("*")
+
+.order("total", {
+ascending:false
+})
+
+.limit(50);
+
+
+if (error) {
+
+throw error;
+
+}
+
+
+if (!data || data.length === 0) {
+
+lista.innerHTML =
+`<p class="loading">
+Ainda não há resultados.
+</p>`;
+
+return;
+
+}
+
+
+lista.innerHTML = "";
+
+
+data.forEach((jogador,index) => {
+
+const posicao =
+index + 1;
+
+let medalha;
+
+let classe = "";
+
+
+if (posicao === 1) {
+
+medalha = "🥇";
+
+classe = "primeiro";
+
+}
+
+else if (posicao === 2) {
+
+medalha = "🥈";
+
+classe = "segundo";
+
+}
+
+else if (posicao === 3) {
+
+medalha = "🥉";
+
+classe = "terceiro";
+
+}
+
+else {
+
+medalha = `${posicao}º`;
+
+}
+
+
+const coroa =
+posicao === 1
+? " 👑"
+: "";
+
+
+lista.innerHTML += `
+
+<div class="ranking-item ${classe}">
+
+<div>
+${medalha}
+</div>
+
+<div class="nome">
+${escaparHTML(jogador.nome)}${coroa}
+</div>
+
+<div>
+${jogador.primeiro_quiz}/20
+</div>
+
+<div>
+${jogador.segundo_quiz}/20
+</div>
+
+<div class="total">
+${jogador.total}/40
+</div>
+
+</div>
+
+`;
+
+});
+
+
+}
+
+catch (erro) {
+
+console.error(erro);
+
+lista.innerHTML = `
+
+<p class="erro">
+❌ Erro ao carregar o placar.
+</p>
+
+`;
+
+}
+
+}
+
+
+/* =====================================================
+PROTEGER NOME
+===================================================== */
+
+function escaparHTML(texto) {
+
+const div =
+document.createElement("div");
+
+div.textContent = texto;
+
+return div.innerHTML;
+
+}
 
 </script>
 
