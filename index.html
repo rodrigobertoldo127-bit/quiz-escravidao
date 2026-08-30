@@ -20,8 +20,16 @@ body {
     padding: 20px;
     min-height: 100vh;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
     color: white;
+
+    /* FOTO DE FUNDO - FUNCIONA NO file:/// E NO GITHUB PAGES */
+    background-image:
+        linear-gradient(rgba(8, 12, 20, 0.72), rgba(8, 12, 20, 0.82)),
+        url("https://upload.wikimedia.org/wikipedia/commons/8/82/Slaves_working_on_a_coffee_plantation_01.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
 .container {
@@ -31,7 +39,11 @@ body {
 }
 
 .card {
-    background: rgba(255,255,255,0.08);
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.35);
     border-radius: 18px;
     padding: 25px;
     margin-bottom: 20px;
@@ -81,7 +93,7 @@ button:hover {
 }
 
 .question {
-    background: rgba(0,0,0,0.18);
+    background: rgba(0,0,0,0.30);
     padding: 18px;
     border-radius: 14px;
     margin-bottom: 18px;
@@ -186,6 +198,15 @@ input[type="radio"] {
 }
 
 @media (max-width: 650px) {
+
+    body {
+        padding: 10px;
+        background-attachment: scroll;
+    }
+
+    .card {
+        padding: 18px;
+    }
 
     .ranking-header,
     .ranking-item {
@@ -315,7 +336,6 @@ onclick="carregarPlacar()"
 
 
 <script>
-
 
 /* =====================================================
 SUPABASE
@@ -827,6 +847,9 @@ nomeJogador = nome;
 
 quizAtual = 1;
 
+notaPrimeiro = 0;
+notaSegundo = 0;
+
 document.getElementById("inicio")
 .classList.add("hidden");
 
@@ -857,6 +880,8 @@ const area =
 document.getElementById("perguntas");
 
 area.innerHTML = "";
+
+document.getElementById("erroQuiz").textContent = "";
 
 lista.forEach((q, index) => {
 
